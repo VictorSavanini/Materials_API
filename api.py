@@ -35,9 +35,8 @@ Para reescrever os dados use o Método rewrite_database().
 utilize o parametro max_time se precisar que o processo seja interrompido automaticamente.
 """
         )
-        self.api_key = api_key
         print("Coletando os ids de todos os materiais")
-        self.ms = self._get_summary()
+        self.ms = self._get_summary(api_key)
 
     def get_sites(self, mpe):
         dfs = []
@@ -72,7 +71,7 @@ utilize o parametro max_time se precisar que o processo seja interrompido automa
 
     # Encontrar DOS na Efermi para cada elemento
     def get_dos_at_efermi(self, material_id: str) -> tuple:
-        "Encontra"
+        "Encontra a densidade de estados na energia de Fermi para um material"
         dos = self.mpr.get_dos_by_material_id(material_id)
         ed = dos.get_element_dos()
 
@@ -93,8 +92,9 @@ utilize o parametro max_time se precisar que o processo seja interrompido automa
 
         return self.find_zero(dg), str(element_values)
 
-    def _get_summary(self):
-        with MPRester(self.api_key) as mpr:
+    def _get_summary(self, api_key):
+        """Puxa o sumário do materials projects apenas com os dados selecionados"""
+        with MPRester(api_key) as mpr:
             self.mpr = mpr
 
             return mpr.summary.search()
@@ -171,7 +171,7 @@ Depois que a tabela temporaria estiver completa, os dados irão para a tabela fi
                             insert into temp_materials (
                                 id,
                                 n_elements,
-                                'n_atoms',
+                                n_atoms,
                                 composition,
                                 formula,
                                 volume,
