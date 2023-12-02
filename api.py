@@ -97,7 +97,30 @@ utilize o parametro max_time se precisar que o processo seja interrompido automa
         with MPRester(self.api_key) as mpr:
             self.mpr = mpr
 
-            return mpr.summary.search()
+            return mpr.summary.search(
+                fields=[
+                    "material_id",
+                    "nelements",
+                    "nsites",
+                    "composition",
+                    "formula_pretty",
+                    "volume",
+                    "density",
+                    "density_atomic",
+                    "symmetry",
+                    "material_id",
+                    "is_stable",
+                    "is_magnetic",
+                    "is_metal",
+                    "is_gap_direct",
+                    "energy_per_atom",
+                    "efermi",
+                    "total_magnetization",
+                    "last_updated",
+                    "deprecated",
+                    "structure",
+                ]
+            )
 
     def rewrite_database(self, max_time: int = None):
         print(
